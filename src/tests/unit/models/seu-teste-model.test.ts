@@ -17,7 +17,7 @@ describe('Car Model', () => {
   });
 
 	describe('creating a car', () => {
-		it('successfully created', async () => {
+		it('Success', async () => {
 			const newCar = await carModel.create(carMock);
 			expect(newCar).to.be.deep.equal(carMockWithId);
 		});

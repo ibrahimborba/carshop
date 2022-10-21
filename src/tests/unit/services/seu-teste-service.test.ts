@@ -1,22 +1,39 @@
-// template para criação dos testes de cobertura da camada de service
+import * as sinon from 'sinon';
+import chai from 'chai';
+const { expect } = chai;
+import { ZodError } from 'zod';
+import CarModel from '../../../models/CarModel';
+import CarService from '../../../services/CarService';
+import { carMock, carMockWithId } from '../../mocks/carMock';
 
+describe('Car Service', () => {
 
-// import * as sinon from 'sinon';
-// import chai from 'chai';
-// const { expect } = chai;
+  const carModel = new CarModel();
+	const carService = new CarService(carModel);
 
-// describe('Sua descrição', () => {
+  before(async () => {
+		sinon.stub(carModel, 'create').resolves(carMockWithId);
+  });
 
-//   before(async () => {
-//     sinon
-//       .stub()
-//       .resolves();
-//   });
+  after(() => {
+    sinon.restore();
+  })
 
-//   after(()=>{
-//     sinon.restore();
-//   })
+	describe('Create Car', () => {
+		it('Success', async () => {
+			const frameCreated = await carService.create(carMock);
+			expect(frameCreated).to.be.deep.equal(carMockWithId);
+		});
 
-//   it('', async () => {});
+		it('Failure', async () => {
+			let error;
+			try {
+				await carService.create({});
+			} catch (err) {
+				error = err
+			}
+			expect(error).to.be.instanceOf(ZodError);
+		});
+	});
 
-// });
+});
