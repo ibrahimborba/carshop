@@ -25,7 +25,7 @@ describe('Car Model', () => {
 	});
 
 	describe('Find All Cars', () => {
-		it('successfully created', async () => {
+		it('Success', async () => {
 			const allCars = await carModel.read();
 			expect(allCars).to.be.deep.equal([carMockWithId]);
 		});

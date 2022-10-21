@@ -12,6 +12,11 @@ class Car implements IService<ICar> {
     }
     return this._model.create(parsed.data);
   }
+
+  public async read():Promise<ICar[]> {
+    const cars = await this._model.read();  
+    return cars;
+  }
 }
 
 export default Car;
