@@ -5,7 +5,7 @@ import { ZodError } from 'zod';
 import CarModel from '../../../models/CarModel';
 import CarService from '../../../services/CarService';
 import { ErrorTypes } from '../../../errors/catalog';
-import { carMock, carMockWithId } from '../../mocks/carMock';
+import { carMock, carMockWithId, carMockUpdate, carMockUpdateWithId } from '../../mocks/carMock';
 
 describe('Car Service', () => {
 
@@ -26,8 +26,8 @@ describe('Car Service', () => {
 
 	describe('Create Car', () => {
 		it('Success', async () => {
-			const frameCreated = await carService.create(carMock);
-			expect(frameCreated).to.be.deep.equal(carMockWithId);
+			const carCreated = await carService.create(carMock);
+			expect(carCreated).to.be.deep.equal(carMockWithId);
 		});
 
 		it('Failure', async () => {
@@ -43,15 +43,15 @@ describe('Car Service', () => {
 
 	describe('Find All Cars', () => {
 		it('Success', async () => {
-			const allFrames = await carService.read();
-			expect(allFrames).to.be.deep.equal([carMockWithId]);
+			const allCars = await carService.read();
+			expect(allCars).to.be.deep.equal([carMockWithId]);
 		});
 	});
 
 	describe('Find One Car', () => {
 		it('Success', async () => {
-			const frameCreated = await carService.readOne(carMockWithId._id);
-			expect(frameCreated).to.be.deep.equal(carMockWithId);
+			const carCreated = await carService.readOne(carMockWithId._id);
+			expect(carCreated).to.be.deep.equal(carMockWithId);
 		});
 
 		it('Failure', async () => {
@@ -63,6 +63,41 @@ describe('Car Service', () => {
 			}
 			expect(error, 'error should be defined').not.to.be.undefined;
 			expect(error.message).to.be.deep.equal(ErrorTypes.EntityNotFound);
+		});
+	});
+
+	describe('Update Car', () => {
+		it('Success', async () => {
+			sinon.stub(carModel, 'update').resolves(carMockUpdateWithId);
+
+			const updated = await carService.update(carMockUpdateWithId._id, carMockUpdate);
+			expect(updated).to.be.deep.equal(carMockUpdateWithId);
+
+			sinon.restore();
+		});
+		
+		it('Failure - Zod', async () => {
+			let error;
+			try {
+				await carService.update(carMockUpdateWithId._id, { INVALID: "OBJECT" })
+			} catch(err) {
+				error = err;
+			}
+			expect(error).to.be.instanceOf(ZodError)
+		});
+
+		it('Failure - Car not Found', async () => {
+			sinon.stub(carModel, 'update').resolves(null);
+
+			let error: any;
+			try {
+				await carService.update('id', carMockUpdate)
+			} catch(err) {
+				error = err;
+			}
+			expect(error?.message).to.be.equal(ErrorTypes.EntityNotFound);
+
+			sinon.restore();
 		});
 	});
 

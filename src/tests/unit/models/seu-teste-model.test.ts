@@ -4,7 +4,7 @@ const { expect } = chai;
 import { Model } from 'mongoose';
 import CarModel from '../../../models/CarModel';
 import { ErrorTypes } from '../../../errors/catalog';
-import { carMock, carMockWithId } from '../../mocks/carMock';
+import { carMock, carMockWithId, carMockUpdate, carMockUpdateWithId } from '../../mocks/carMock';
 
 describe('Car Model', () => {
   const carModel = new CarModel();
@@ -13,6 +13,7 @@ describe('Car Model', () => {
 		sinon.stub(Model, 'create').resolves(carMockWithId);
 		sinon.stub(Model, 'find').resolves([carMockWithId]);
 		sinon.stub(Model, 'findOne').resolves(carMockWithId);
+		sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockUpdateWithId);
   });
 
   after(() => {
@@ -47,6 +48,21 @@ describe('Car Model', () => {
 				error = err;
 			}
 			expect(error.message).to.be.eq(ErrorTypes.InvalidMongoId);
+		});
+	});
+
+	describe('Update Car', () => {
+		it('Success', async () => {
+			const carUpdated = await carModel.update(carMockUpdateWithId._id, carMockUpdate);
+			expect(carUpdated).to.be.deep.equal(carMockUpdateWithId);
+		});
+	
+		it('Failure', async () => {
+			try {
+				await carModel.update('123ERRADO', carMockUpdate);
+			} catch (error:any) {
+				expect(error.message).to.be.eq(ErrorTypes.InvalidMongoId);
+			}
 		});
 	});
 });
