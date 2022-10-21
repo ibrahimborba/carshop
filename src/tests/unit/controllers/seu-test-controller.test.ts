@@ -40,4 +40,17 @@ describe('Car Controller', () => {
       expect(jsonStub.calledWith(carMockWithId)).to.be.true;
     });
   });
+
+  describe('Find All Cars', () => {
+    beforeEach(() => {
+      sinon.stub(carService, 'read').resolves([carMockWithId]);
+    })
+
+    it('Success', async () => {
+      await carController.read(req, res);
+      
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith([carMockWithId])).to.be.true;
+    });
+  });
 });
