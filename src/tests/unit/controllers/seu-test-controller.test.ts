@@ -80,4 +80,16 @@ describe('Car Controller', () => {
       sinon.restore();
     });
   });
+
+  describe('Delete Car', () => {
+    it('Success', async () => {
+      sinon.stub(carService, 'delete').resolves(carMockWithId)
+
+      await carController.delete(req, res);
+      
+      expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
+
+      sinon.restore();
+    });
+  });
 });
