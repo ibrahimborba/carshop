@@ -7,7 +7,7 @@ import CarService from '../../../services/CarService';
 import CarController from '../../../controllers/CarController';
 import { carMock, carMockWithId } from '../../mocks/carMock';
 
-describe('Sua descrição', () => {
+describe('Car Controller', () => {
   const carModel = new CarModel()
   const carService = new CarService(carModel);
   const carController = new CarController(carService);
@@ -24,9 +24,9 @@ describe('Sua descrição', () => {
     sinon.restore()
   })
 
-  describe('Create Frame', () => {
+  describe('Create Car', () => {
     beforeEach(() => {
-      sinon.stub(carService, 'create').resolves(carMock);
+      sinon.stub(carService, 'create').resolves(carMockWithId);
     })
 
     it('Success', async () => {
