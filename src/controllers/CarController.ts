@@ -26,4 +26,9 @@ export default class FrameController {
     const updated = await this._service.update(req.params.id, req.body);
     return res.status(200).json(updated);
   }
+
+  public async delete(req: Request, res: Response<ICar>) {
+    await this._service.delete(req.params.id);
+    return res.status(204).end();
+  }
 }
