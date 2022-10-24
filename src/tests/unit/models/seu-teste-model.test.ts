@@ -71,8 +71,8 @@ describe('Car Model', () => {
 
 	describe('Delete Car', () => {
 		it('Success', async () => {
-			const deleted = await carModel.delete(carMockWithId._id);
-			expect(deleted).to.be.deep.equal(carMockWithId);
+			const deleted = await carModel.delete(carMockUpdateWithId._id);
+			expect(deleted).to.be.deep.equal(carMockUpdateWithId);
 		});
 
 		it('Failure', async () => {

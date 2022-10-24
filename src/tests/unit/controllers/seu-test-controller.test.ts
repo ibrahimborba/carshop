@@ -18,6 +18,7 @@ describe('Car Controller', () => {
   before(() => {
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns(res);
+    res.end = sinon.stub().returns(res);
   });
 
   afterEach(() => {
